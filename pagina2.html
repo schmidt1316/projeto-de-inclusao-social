@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Números</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #A0D9D9;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #instructions {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #number-buttons {
+            display: flex;
+            gap: 20px;
+        }
+        .number-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            background-color: #FFB3B3;
+            transition: transform 0.1s, background-color 0.3s;
+        }
+        .number-button:hover {
+            background-color: #FF9999;
+        }
+        .number-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <h1>Acha o Número!</h1>
+    <div id="instructions">Clique no número: <span id="target-number">1</span></div>
+    <div id="number-buttons">
+        <div class="number-button" onclick="checkNumber(1)">1</div>
+        <div class="number-button" onclick="checkNumber(2)">2</div>
+        <div class="number-button" onclick="checkNumber(3)">3</div>
+        <div class="number-button" onclick="checkNumber(4)">4</div>
+    </div>
+    <audio id="correct-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="https://www.soundjay.com/button/sounds/button-10.mp3" preload="auto"></audio>
+
+    <script>
+        const targetNumberSpan = document.getElementById('target-number');
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+        const numbers = [1, 2, 3, 4];
+        let targetNumber;
+
+        function randomNumber() {
+            targetNumber = numbers[Math.floor(Math.random() * numbers.length)];
+            targetNumberSpan.textContent = targetNumber;
+        }
+
+        function checkNumber(selectedNumber) {
+            if (selectedNumber === targetNumber) {
+                correctSound.play();
+                alert('Número correto! Você irá para o jogo da letra diferente.');
+                window.location.href = 'http://192.168.70.26:8050/render/conteudos/2B/GUILHERME/projeto_inclusivo/pagina3.html';
+            } else {
+                wrongSound.play();
+                alert('Número errado! Tente novamente.');
+            }
+        }
+
+        randomNumber();
+    </script>
+</body>
+</html>

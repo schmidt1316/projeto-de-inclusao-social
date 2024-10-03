@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Cores</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FFDE93;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #instructions {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #buttons {
+            display: flex;
+            gap: 20px;
+        }
+        .color-button {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.3s;
+        }
+        .color-button:hover {
+            border-color: #000;
+        }
+        .color-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <h1>Reconheça a Cor!</h1>
+    <div id="instructions">Clique na cor: <span id="target-color">Azul</span></div>
+    <div id="buttons">
+        <div class="color-button" style="background-color: red;" onclick="checkColor('red')"></div>
+        <div class="color-button" style="background-color: green;" onclick="checkColor('green')"></div>
+        <div class="color-button" style="background-color: blue;" onclick="checkColor('blue')"></div>
+        <div class="color-button" style="background-color: yellow;" onclick="checkColor('yellow')"></div>
+    </div>
+    <audio id="correct-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="https://www.soundjay.com/button/sounds/button-10.mp3" preload="auto"></audio>
+
+    <script>
+        const targetColorSpan = document.getElementById('target-color');
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+        const colors = ['red', 'green', 'blue', 'yellow'];
+        let targetColor;
+
+        function randomColor() {
+            targetColor = colors[Math.floor(Math.random() * colors.length)];
+            targetColorSpan.textContent = targetColor.charAt(0).toUpperCase() + targetColor.slice(1);
+        }
+
+        function checkColor(selectedColor) {
+            if (selectedColor === targetColor) {
+                correctSound.play();
+                alert('Cor correta! Você irá para o jogo dos números.');
+                window.location.href = 'http://192.168.70.26:8050/render/conteudos/2B/GUILHERME/projeto_inclusivo/pagina2.html';
+            } else {
+                wrongSound.play();
+                alert('Cor errada! Tente novamente.');
+            }
+            randomColor();
+        }
+
+        randomColor();
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acha a Letra Diferente</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FFC3A0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s; /* Transição suave */
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #instructions {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(7, 50px);
+            grid-template-rows: repeat(7, 50px);
+            gap: 5px;
+            margin: 20px 0;
+        }
+        .letter-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            background-color: #D5AAFF;
+            transition: transform 0.1s, background-color 0.3s;
+        }
+        .letter-button:hover {
+            background-color: #C8A2E0;
+        }
+        .letter-button:active {
+            transform: scale(0.95);
+        }
+        #message, #message-wrong {
+            position: absolute;
+            font-size: 48px;
+            color: #fff;
+            display: none; /* Inicialmente escondido */
+            text-align: center;
+            z-index: 10; /* Para garantir que a mensagem fique sobre outros elementos */
+        }
+    </style>
+</head>
+<body>
+    <h1>Acha a Letra Diferente!</h1>
+    <div id="instructions">Clique na letra diferente: <span id="target-letter">A</span></div>
+    <div id="grid"></div>
+    <audio id="correct-sound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="https://www.soundjay.com/button/sounds/button-10.mp3" preload="auto"></audio>
+    <div id="message">Parabéns!</div>
+    <div id="message-wrong">Não foi dessa vez!</div>
+
+    <script>
+        const grid = document.getElementById('grid');
+        const targetLetterSpan = document.getElementById('target-letter');
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+        const message = document.getElementById('message');
+        const messageWrong = document.getElementById('message-wrong');
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        let targetLetter;
+
+        function createGrid() {
+            const letterArray = Array(48).fill('A'); // 48 letras A
+            targetLetter = letters[Math.floor(Math.random() * letters.length)];
+            letterArray.push(targetLetter); // Adiciona a letra diferente
+            letterArray.sort(() => Math.random() - 0.5); // Embaralha as letras
+
+            grid.innerHTML = ''; // Limpa o grid
+
+            letterArray.forEach(letter => {
+                const button = document.createElement('div');
+                button.className = 'letter-button';
+                button.textContent = letter;
+                button.onclick = () => checkLetter(letter);
+                grid.appendChild(button);
+            });
+
+            targetLetterSpan.textContent = targetLetter;
+            message.style.display = 'none'; // Esconde a mensagem de vitória
+            messageWrong.style.display = 'none'; // Esconde a mensagem de erro
+        }
+
+        function checkLetter(selectedLetter) {
+            if (selectedLetter === targetLetter) {
+                correctSound.play();
+                document.body.style.background = "linear-gradient(to right, #32CD32, #66FF66)"; // Muda para degradê verde
+                message.style.display = 'block'; // Exibe a mensagem de parabéns
+                resetGame(true);
+            } else {
+                wrongSound.play();
+                document.body.style.background = "linear-gradient(to right, #FF4500, #FF6347)"; // Muda para degradê vermelho
+                messageWrong.style.display = 'block'; // Exibe a mensagem de erro
+                resetGame(false);
+            }
+        }
+
+        function resetGame(isCorrect) {
+            setTimeout(() => {
+                createGrid(); // Cria um novo grid
+                document.body.style.backgroundColor = "#FFC3A0"; // Reseta a cor do fundo
+            }, 2000); // Espera 2 segundos antes de reiniciar o jogo
+            
+            if (isCorrect) {
+                setTimeout(() => message.style.display = 'none', 2000); // Esconde a mensagem de vitória após 2 segundos
+            } else {
+                setTimeout(() => messageWrong.style.display = 'none', 2000); // Esconde a mensagem de erro após 2 segundos
+            }
+        }
+
+        // Iniciar o jogo
+        createGrid();
+    </script>
+</body>
+</html>
